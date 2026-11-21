@@ -31,11 +31,21 @@ header {
   padding: 22px 7%;
   border-bottom: 1px solid var(--border);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 18px;
 }
 .logo { font-size: 23px; font-weight: 750; letter-spacing: -1px; }
 .logo span { color: var(--accent); }
+.menu-button {
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: var(--panel2);
+  padding: 9px 13px;
+  font-size: 21px;
+  border-radius: 9px;
+}
+.header-small { margin-left: auto; }
 main {
   width: min(650px, 90%);
   margin: 75px auto;
@@ -133,31 +143,113 @@ footer {
   font-size: 12px;
 }
 a { color: var(--accent); }
+
+/* SEITENMENÜ */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: .25s;
+}
+.sidebar {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  left: 0;
+  width: min(300px, 82vw);
+  height: 100%;
+  padding: 25px 20px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  transform: translateX(-100%);
+  transition: transform .25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.menu-open .menu-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+.menu-open .sidebar {
+  transform: translateX(0);
+}
+.sidebar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.sidebar-title {
+  font-size: 21px;
+  font-weight: 750;
+}
+.close-button {
+  color: var(--text);
+  background: var(--panel2);
+  font-size: 20px;
+  padding: 7px 12px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  background: transparent;
+}
+.nav-link:hover,
+.nav-link.active {
+  background: var(--panel2);
+  color: var(--accent);
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
+  <button class="menu-button" id="menuButton"
+    aria-label="Menü öffnen" aria-expanded="false">☰</button>
   <div class="logo">Kontakt<span>.</span></div>
-  <div class="small">Streitschlichter FKG</div>
+  <div class="small header-small">Streitschlichter FKG</div>
 </header>
-  
-<div style="text-align:center; padding-top:20px;">
-  <a href="https://streitschlichter-fkg.github.io/Homepage/"
-     style="
-       display:inline-block;
-       background:#222a3a;
-       color:#7795ff;
-       padding:13px 19px;
-       border-radius:10px;
-       text-decoration:none;
-       font-weight:650;
-       border:1px solid #30394c;
-     ">
-    Homepage
+
+<div class="menu-overlay" id="overlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar-head">
+    <div class="sidebar-title">Menü</div>
+    <button class="close-button" id="closeButton"
+      aria-label="Menü schließen">✕</button>
+  </div>
+
+  <a class="nav-link" href="https://streitschlichter-fkg.github.io/Homepage/">
+    <span>⌂</span> Homepage
   </a>
-</div>
+
+  <a class="nav-link" href="https://streitschlichter-fkg.github.io/Aufgaben/">
+    <span>▤</span> Aufgaben
+  </a>
+
+  <a class="nav-link active" href="https://streitschlichter-fkg.github.io/Kontakt/">
+    <span>✉</span> Kontakt
+  </a>
+
+  <div class="sidebar-footer">Streitschlichter FKG</div>
+</nav>
 
 <main>
 
@@ -314,6 +406,38 @@ function updateView() {
 }
 
 window.addEventListener("hashchange", updateView);
+
+// ============================================
+// SEITENMENÜ
+// ============================================
+
+const menuButton = document.getElementById("menuButton");
+const closeButton = document.getElementById("closeButton");
+const overlay = document.getElementById("overlay");
+
+function openMenu() {
+  document.body.classList.add("menu-open");
+  menuButton.setAttribute("aria-expanded", "true");
+}
+
+function closeMenu() {
+  document.body.classList.remove("menu-open");
+  menuButton.setAttribute("aria-expanded", "false");
+}
+
+menuButton.addEventListener("click", openMenu);
+closeButton.addEventListener("click", closeMenu);
+overlay.addEventListener("click", closeMenu);
+
+document.querySelectorAll(".nav-link").forEach(link => {
+  link.addEventListener("click", closeMenu);
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeMenu();
+  }
+});
 
 // ============================================
 // NACHRICHT ABSENDEN
