@@ -27,6 +27,9 @@ body {
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+body.menu-open {
+  overflow: hidden;
+}
 header {
   padding: 22px 7%;
   border-bottom: 1px solid var(--border);
@@ -37,14 +40,23 @@ header {
 }
 .logo { font-size: 23px; font-weight: 750; letter-spacing: -1px; }
 .logo span { color: var(--accent); }
+
 .menu-button {
-  border: 1px solid var(--border);
+  border: none;
+  outline: none;
+  box-shadow: none;
   color: var(--text);
-  background: var(--panel2);
-  padding: 9px 13px;
-  font-size: 21px;
-  border-radius: 9px;
+  background: transparent;
+  padding: 9px 0;
+  font-size: 25px;
+  border-radius: 0;
+  cursor: pointer;
 }
+.menu-button:hover {
+  color: var(--accent);
+  background: transparent;
+}
+
 .header-small { margin-left: auto; }
 main {
   width: min(650px, 90%);
@@ -186,6 +198,9 @@ a { color: var(--accent); }
   font-size: 21px;
   font-weight: 750;
 }
+.sidebar-title span {
+  color: var(--accent);
+}
 .close-button {
   color: var(--text);
   background: var(--panel2);
@@ -231,7 +246,7 @@ a { color: var(--accent); }
 
 <nav class="sidebar" id="sidebar" aria-label="Hauptnavigation">
   <div class="sidebar-head">
-    <div class="sidebar-title">Menü.</div>
+    <div class="sidebar-title">Menü<span>.</span></div>
     <button class="close-button" id="closeButton"
       aria-label="Menü schließen">✕</button>
   </div>
